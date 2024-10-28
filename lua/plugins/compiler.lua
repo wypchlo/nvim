@@ -35,14 +35,14 @@ return {
                 }
             })
             --this has to be fixed
-            vim.api.nvim_create_autocmd("FileType", {
+            --[[vim.api.nvim_create_autocmd("FileType", {
                 pattern = "OverseerList",
                 callback = function()
                     local current_buffer = vim.fn.bufnr('%');
                     vim.cmd("tabnew compiler | tabprevious | wincmd c | wincmd c | tabnext");
                     vim.cmd("buffer " .. current_buffer);
                 end,
-            })
+            })]]
         end
     },
 }

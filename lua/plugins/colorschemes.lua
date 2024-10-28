@@ -10,7 +10,10 @@ return {
                 'SignColumn', 'CursorLine', 'CursorLineNr', 'StatusLine', 'StatusLineNC',
                 'EndOfBuffer',
               },
-              extra_groups = {},
+              extra_groups = {
+                "NormalFloat", "FloatBorder", "DiagnosticSignError", "DiagnosticSignHint",
+                "DiagnosticSignInfo", "DiagnosticSignWarn", "TelescopeBorder"
+              },
               exclude_groups = {},
               on_clear = function() end,
             })
@@ -22,24 +25,9 @@ return {
             vim.api.nvim_create_autocmd("ColorScheme", {
                 pattern = "*",
                 callback = function()
-                    --vim.cmd("TransparentEnable")
                     vim.cmd("colorscheme kanagawa-dragon")
-
-                    --floating windows fix
-                    vim.cmd('hi! NormalFloat guibg=none')
-                    vim.cmd('hi! FloatBorder guibg=none')
-
-                    --line numbers fix
-                    vim.cmd('hi! LineNr guibg=none ctermbg=none');
-
-                    --lsp error column fix
-                    vim.cmd('hi! SignColumn guibg=none');
-                    vim.cmd('hi! DiagnosticSignError guibg=none');
-                    vim.cmd('hi! DiagnosticSignHint guibg=none');
-                    vim.cmd('hi! DiagnosticSignInfo guibg=none');
-                    vim.cmd('hi! DiagnosticSignWarn guibg=none');
                 end,
             })
         end
-    }
+    },
 }

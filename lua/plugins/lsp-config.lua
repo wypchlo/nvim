@@ -47,7 +47,27 @@ return {
 
             local lspconfig = require('lspconfig');
 
-            lspconfig.lua_ls.setup({capabilities = capabilities});
+            lspconfig.lua_ls.setup({
+                capabilities = capabilities,
+                settings = {
+                  Lua = {
+                    runtime = {
+                      version = "LuaJIT",
+                      path = vim.split(package.path, ";"),
+                    },
+                    diagnostics = {
+                      globals = { "vim" },
+                    },
+                    workspace = {
+                      library = { vim.env.VIMRUNTIME },
+                      checkThirdParty = false,
+                    },
+                    telemetry = {
+                      enable = false,
+                    },
+                  },
+                },
+            });
             lspconfig.clangd.setup({capabilities = capabilities});
             lspconfig.cssls.setup({capabilities = capabilities});
             lspconfig.jdtls.setup({capabilities = capabilities});
