@@ -1,5 +1,9 @@
 return {
     {
+        "rcarriga/nvim-dap-ui",
+        opts = {}
+    },
+    {
         "mfussenegger/nvim-dap",
         dependencies = {
             "rcarriga/nvim-dap-ui",
@@ -22,27 +26,58 @@ return {
               dapui.close()
             end
 
-            dap.adapters.codelldb = {
-              type = 'server',
-              port = "${port}",
-              executable = {
-                command = '/home/deron/.local/share/nvim/mason/packages/codelldb/extension/adapter/codelldb',
-                args = {"--port", "${port}"},
-              }
+            dap.adapters.gdb = {
+                id = 'gdb',
+                type = 'executable',
+                command = 'gdb',
+                args = { '--quiet', '--interpreter=dap' },
             }
 
-            dap.configurations.cpp = {
-              {
-                name = "Launch file",
-                type = "codelldb",
-                request = "launch",
-                program = function()
-                  return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-                end,
-                cwd = '${workspaceFolder}',
-                stopOnEntry = false,
-              },
+            dap.configurations.c = {
+                {
+                    name = 'Run executable (GDB)',
+                    type = 'gdb',
+                    request = 'launch',
+
+                    program = function()
+                        local path = vim.fn.input({
+                            prompt = 'Path to executable: ',
+                            default = vim.fn.getcwd() .. '/',
+                            completion = 'file',
+                        })
+
+                        return (path and path ~= '') and path or dap.ABORT
+                    end,
+                },
+                {
+                    name = 'Run executable with arguments (GDB)',
+                    type = 'gdb',
+                    request = 'launch',
+                    program = function()
+                        local path = vim.fn.input({
+                            prompt = 'Path to executable: ',
+                            default = vim.fn.getcwd() .. '/',
+                            completion = 'file',
+                        })
+
+                        return (path and path ~= '') and path or dap.ABORT
+                    end,
+                    args = function()
+                        local args_str = vim.fn.input({
+                            prompt = 'Arguments: ',
+                        })
+                        return vim.split(args_str, ' +')
+                    end,
+                },
+                {
+                    name = 'Attach to process (GDB)',
+                    type = 'gdb',
+                    request = 'attach',
+                    processId = require('dap.utils').pick_process,
+                },
             }
+
+            dap.configurations.cpp = dap.configurations.c
 
             vim.keymap.set('n', '<leader>dt', dap.toggle_breakpoint, {})
             vim.keymap.set('n', '<leader>dc', dap.continue, {})
