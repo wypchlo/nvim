@@ -15,7 +15,8 @@ return {
                     'cssls',
                     'jdtls',
                     'ts_ls',
-                    'emmet_language_server'
+                    'emmet_language_server',
+                    'csharp_ls'
                 }
             })
         end;
@@ -81,6 +82,11 @@ return {
                     }
                 }
             });
+            lspconfig.csharp_ls.setup({
+                root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj"),
+                capabilities = capabilities
+            });
+
             vim.keymap.set('n', 'K', require('hover').hover, {desc = 'hover.nvim'});
             vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
             vim.keymap.set({ 'n' }, '<leader>ca', vim.lsp.buf.code_action, {})

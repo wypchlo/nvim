@@ -1,17 +1,20 @@
 return {
     {
         "rcarriga/nvim-dap-ui",
+        lazy = true,
         opts = {}
     },
     {
         "mfussenegger/nvim-dap",
+        lazy = true,
         dependencies = {
             "rcarriga/nvim-dap-ui",
             "nvim-neotest/nvim-nio",
             "williamboman/mason.nvim"
         },
         config = function()
-            local dap, dapui = require("dap"), require("dapui")
+            local dap = require("dap")
+            local dapui = require("dapui")
 
             dap.listeners.before.attach.dapui_config = function()
               dapui.open()
@@ -25,6 +28,8 @@ return {
             dap.listeners.before.event_exited.dapui_config = function()
               dapui.close()
             end
+
+            -- C++ and C debugging configurations
 
             dap.adapters.gdb = {
                 id = 'gdb',
@@ -40,13 +45,13 @@ return {
                     request = 'launch',
 
                     program = function()
-                        local path = vim.fn.input({
+                        --[[local path = vim.fn.input({
                             prompt = 'Path to executable: ',
                             default = vim.fn.getcwd() .. '/',
                             completion = 'file',
-                        })
-
-                        return (path and path ~= '') and path or dap.ABORT
+                        })]]
+                        --return (path and path ~= '') and path or dap.ABORT
+                        return vim.fn.getcwd() .. '/bin/program'
                     end,
                 },
                 {
@@ -79,8 +84,29 @@ return {
 
             dap.configurations.cpp = dap.configurations.c
 
+            -- C# debugging configuration
+
+            dap.adapters.coreclr = {
+                type = 'executable',
+                command = '/usr/bin/netcoredbg',
+                args = {'--interpreter=vscode'}
+            }
+
+            dap.configurations.cs = {
+                {
+                    type = "coreclr",
+                    name = "launch - netcoredbg",
+                    request = "launch",
+                    program = function()
+                        return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+                    end,
+                },
+            }
+
+            -- Shortcuts
+
             vim.keymap.set('n', '<leader>dt', dap.toggle_breakpoint, {})
-            vim.keymap.set('n', '<leader>dc', dap.continue, {})
+            vim.keymap.set('n', '<leader>dd', dap.continue, {})
         end
     }
 }
