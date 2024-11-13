@@ -83,6 +83,7 @@ return {
             }
 
             dap.configurations.cpp = dap.configurations.c
+            dap.configurations.rs = dap.configurations.c
 
             -- C# debugging configuration
 

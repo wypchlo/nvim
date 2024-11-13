@@ -6,7 +6,7 @@ return {
             highlight = { enable = true },
             indent = { enable = false },
             ensure_installed = {
-                'lua', 'vim', 'html', 'c', 'css', 'rust', 'javascript', 'c_sharp', 'cpp'
+                'lua', 'vim', 'html', 'c', 'css', 'rust', 'javascript', 'c_sharp', 'cpp', 'prisma'
             }
 	      },
 	      config = function(_, opts)

@@ -16,7 +16,9 @@ return {
                     'jdtls',
                     'ts_ls',
                     'emmet_language_server',
-                    'csharp_ls'
+                    'csharp_ls',
+                    'rust_analyzer',
+                    'prismals'
                 }
             })
         end;
@@ -86,10 +88,19 @@ return {
                 root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj"),
                 capabilities = capabilities
             });
+            lspconfig.rust_analyzer.setup({capabilities = capabilities});
 
             vim.keymap.set('n', 'K', require('hover').hover, {desc = 'hover.nvim'});
             vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
             vim.keymap.set({ 'n' }, '<leader>ca', vim.lsp.buf.code_action, {})
         end;
+    },
+    {
+        "j-hui/fidget.nvim",
+        enabled = true,
+        event = "LspAttach",
+        opts = {
+            notification = { override_vim_notify = true }
+        }
     }
 }
