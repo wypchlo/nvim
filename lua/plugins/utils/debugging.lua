@@ -45,13 +45,12 @@ return {
                     request = 'launch',
 
                     program = function()
-                        --[[local path = vim.fn.input({
+                        local path = vim.fn.input({
                             prompt = 'Path to executable: ',
                             default = vim.fn.getcwd() .. '/',
                             completion = 'file',
-                        })]]
-                        --return (path and path ~= '') and path or dap.ABORT
-                        return vim.fn.getcwd() .. '/bin/program'
+                        })
+                        return (path and path ~= '') and path or dap.ABORT
                     end,
                 },
                 {

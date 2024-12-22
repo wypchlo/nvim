@@ -27,7 +27,12 @@ return {
               },
             },
         });
-        lspconfig.clangd.setup({capabilities = capabilities});
+        lspconfig.clangd.setup({
+            capabilities = capabilities,
+            cmd = { "clangd", "--background-index" },  -- This tells clangd to index your project in the background
+            filetypes = { "c", "cpp", "objc", "objcpp" },
+            root_dir = lspconfig.util.root_pattern("compile_commands.json", ".git"),  -- Use compile_commands.json for flags
+        });
         lspconfig.cssls.setup({capabilities = capabilities});
         lspconfig.jdtls.setup({capabilities = capabilities});
         lspconfig.ts_ls.setup({
